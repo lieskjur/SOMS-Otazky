@@ -1,0 +1,113 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+% Basic packages
+	\usepackage{amssymb}
+	\usepackage{amsmath}
+	\usepackage{graphicx}
+	\usepackage[czech]{babel}
+	\usepackage{natbib}
+
+% Relevant packages
+	\usepackage{bm}
+	\usepackage{bbm}
+	\usepackage{geometry}
+	\usepackage{enumitem}
+	\usepackage{listings}
+	\usepackage{multicol,float}
+
+% Document settings
+	\geometry{a4paper,margin=15mm}
+
+	\setlist[itemize]{nolistsep,noitemsep}
+		
+	\setlength{\parindent}{0pt}
+	\setlength{\parskip}{1.5em}
+	\renewcommand{\baselinestretch}{1.2}
+
+	\setlength{\abovedisplayskip}{1.2em}
+	\setlength{\belowdisplayskip}{1.2em}
+	\renewcommand{\arraystretch}{1.2}
+
+\begin{document}
+	\section{13 Kalibrace}
+
+	\begin{equation}
+		\bm{f}(\bm{x},\bm{p}) = \bm{0}
+	\end{equation}
+	kde $\bm{x}$ jsou měřené veličiny a $\bm{p}$ kalibrační parametry
+
+	\begin{equation}
+		\bm{F}(\bm{X},\bm{p})
+		=
+		\bm{0} \doteq \bm{F}(\bm{X},\bm{\overline{p}})
+		+
+		\underbrace{\frac{\partial \bm{F}(\bm{X},\bm{\overline{p}})}{\partial p}}_{\bm{J}_p} \Delta\bm{p}
+		\;\Rightarrow\;
+		\Delta\bm{p} = \bm{J}_p^+ \bm{F}(\bm{X},\bm{\overline{p}})
+	\end{equation}
+	kde
+	\begin{equation}
+		\bm{F}
+		=
+		\begin{bmatrix}
+			\bm{f}(\bm{x}_1,\bm{p}) = \bm{0} \\
+			\vdots \\
+			\bm{f}(\bm{x}_n,\bm{p}) = \bm{0}
+		\end{bmatrix}
+		\;,\quad 
+		\bm{X}
+		=
+		\begin{bmatrix}
+			\bm{x}_1 \\
+			\vdots \\
+			\bm{x}_n
+		\end{bmatrix}
+	\end{equation}
+
+	Kalibrovatelnost je obcená schopnost kalibrovat mechanismus. Závisí na volbě kalibrovaných parametrů i kalibračních poloh. Značnou roli hraje podmíněnost matice $\bm{J}_p^T \bm{J}_p$.
+
+	\section*{14 Rozšířená kalibrovatelnost}
+	\begin{equation}
+		\bm{f}(\bm{\overline{x}}+\bm{\hat{x}},\bm{\overline{p}}+\bm{\hat{p}}) = \bm{0}
+	\end{equation}
+	kde $\bm{\overline{x}}$ jsou měřené veličiny, $\bm{\hat{x}}$ opravy veličiny, $\bm{p}$ kalibrační parametry a $\bm{\hat{p}}$ opravy parametrů.
+
+	Cílem je minimalizovat kritérium
+	\begin{equation}
+	\chi^2 = \sum_{i=1}^N \bm{\hat{x}}_i^T \bm{C}_x^{\frac{1}{2}} \bm{\hat{x}}_i + \bm{\hat{p}}^T \bm{C}_p^{\frac{1}{2}} \bm{\hat{p}} 
+	\end{equation}
+	Při splnění
+	\begin{equation}
+		\sum_{i=1}^N \bm{f}(\bm{\overline{x}}_i+\bm{\hat{x}}_i,\bm{\overline{p}}+\bm{\hat{p}}) = \bm{0}
+	\end{equation}
+	To zprostředkujeme zavedením Lagrangiánu
+	\begin{equation}
+		L = \chi^2 + \sum_{i=1}^N \lambda_i \bm{f}(\bm{\overline{x}}_i+\bm{\hat{x}}_i,\bm{\overline{p}}+\bm{\hat{p}})
+	\end{equation}
+
+	\section*{15 Beneš-Šika kalibrace}
+
+	Přechod mezi následujícími osami lze popsat 4 parametry $\Rightarrow$
+
+	\begin{align}
+		&\underbrace{
+			\bm{T}_x(x_0)\bm{T}_y(y_0)\bm{T}_z(z_0)\bm{T}_{\phi_x}(\phi_{x_0})\bm{T}_{\phi_y}(\phi_{y_0})\bm{T}_{\phi_z}(\phi_{z_0})
+		}_{\text{Tracker-Základna}}
+		\bm{T}_{\phi_z}(\phi_{12})
+		\underbrace{
+			\bm{T}_x(x_2)\bm{T}_z(z_2)\bm{T}_{\phi_x}(\phi_{x_2})\bm{T}_{\phi_z}(\phi_{z_2})
+		}_{\text{Kalibrace na tělesu 2}}\\&
+		\bm{T}_{\phi_x}(-\phi_{23})
+		\underbrace{
+			\bm{T}_x(x_3)\bm{T}_z(z_3)\bm{T}_{\phi_x}(\phi_{x_3})\bm{T}_{\phi_z}(\phi_{z_3})
+		}_{\text{Kalibrace na tělesu 3}}
+		\ldots
+		\bm{r}_{N K} = \bm{r}_{0K}
+	\end{align}
+	(pls někdo doplňte zbytek rovnice a obrázek)
+
+	Pro každou kalibrační polohu máme 3 rovnice a mechanismus má dohromady 27 kalibračních parametrů $\Rightarrow$ potřebujeme min. 9 kalibračních poloh.
+
+
+\end{document}
