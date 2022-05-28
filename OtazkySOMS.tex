@@ -40,6 +40,7 @@
 	\section{Základní principy globální optimalizace pomocí genetických algoritmů.}
 
 	\section{Základní principy globální optimalizace pomocí simulovaného žíhání.}
+	\pagebreak
 
 	\section{Kinematická syntéza převodových mechanismů (ilustrace na tříbodové a čtyřbodové syntéze klikového mechanismu).}
 
@@ -73,7 +74,9 @@
 
 	\url{https://moodle-vyuka.cvut.cz/pluginfile.php/242038/mod_resource/content/0/se_ctyrmi.pdf}
 
+	\pagebreak
 	\section{Formulace cílové funkce a optimalizační úlohy syntézy vodícího čtyřkloubového mechanismu.}
+	\pagebreak
 
 	\section{Kinematická syntéza vybraného prostorového mechanismu.}
 
@@ -89,7 +92,7 @@
 	\end{equation}
 	a také určuje převod akčních sil $\bm{F}_p$ a sil působících na koncový bod $\bm{F}_e$
 	\begin{equation}
-		\bm{F}_e = \bm{J} \bm{F}_p
+		\bm{F}_e = \bm{J}^T \bm{F}_p
 	\end{equation}
 
 	Podmíněnost lze definovat přes svd rozklad
@@ -192,20 +195,21 @@
 	\end{equation}
 	kde $\bm{\overline{x}}$ jsou měřené veličiny, $\bm{\hat{x}}$ opravy veličiny, $\bm{p}$ kalibrační parametry a $\bm{\hat{p}}$ opravy parametrů.
 
-	Cílem následné optimalizace je minimalizovat kvadratické kritérium
+	Cílem následné optimalizace je minimalizovat kritérium optimality
 	\begin{equation}
-	\chi^2 = \sum_{i=1}^N \bm{\hat{x}}_i^T \bm{C}_x^{-1} \bm{\hat{x}}_i + \bm{\hat{p}}^T \bm{C}_p^{-1} \bm{\hat{p}} 
+		\chi^2 = \sum_{i=1}^N \bm{\hat{x}}_i^T \bm{C}_x^{-1} \bm{\hat{x}}_i + \bm{\hat{p}}^T \bm{C}_p^{-1} \bm{\hat{p}} 
 	\end{equation}
 	pro $N$ měření, kde $\bm{C}_p$ je kovariace ``chyby'' parametrů a $\bm{C}_x$ signálů čidel, při splnění podmínky
 	\begin{equation}
 		\sum_{i=1}^N \bm{f}(\bm{\overline{x}}_i+\bm{\hat{x}}_i,\bm{\overline{p}}+\bm{\hat{p}}) = \bm{0}
 	\end{equation}
+	Tzn úloha je definovaná jako optimalizační problém s kvadratickým kritériem optimality a nelineárními podmínkou rovnosti.
 
 	Základní metodou řešení těchto problemů je \emph{Lagrangeova metoda} postavená na zavedení Lagrangiánu, v našem případě
 	\begin{equation}
 		L = \chi^2 + \sum_{i=1}^N \bm{\lambda}_i \bm{f}(\bm{\overline{x}}_i+\bm{\hat{x}}_i,\bm{\overline{p}}+\bm{\hat{p}})
 	\end{equation}
-	\emph{First-Order Conditons} neboli podmínky prvního řádu, které zaručují nalezení lokálního extrému při splnění podmínky lze zapsat jako
+	\emph{First-Order Conditons} neboli podmínky prvního řádu, které zaručují nalezení lokálního extrému kritéria optimality (u kvadratického globální) při splnění podmínky lze zapsat jako
 	\begin{align}
 		\frac{\partial L}{\partial \bm{\hat{x}}_i} &= \bm{0} \\
 		\frac{\partial L}{\partial \bm{\hat{p}}} &= \bm{0} \\
@@ -214,8 +218,51 @@
 
 	\url{https://www.econgraphs.org/textbook/math/optimization/constrained}
 	
-	Krivošej ve své bakalářce odvozuje převod, který umožnuje řešit tuto soustavu rovnic bez potřeby výpočtu druhé derivace, ale vzhledem k rozšířenosti různých metod pro numerickou diferenciaci a obecných řešičů omezených optimalizačních problémů mi přijde zbytečné ji popisovat.
+	Krivošej ve své bakalářce používá metodu kde
+	\begin{enumerate}
+		\item zavádí \emph{normalizované chybové proměnné} $\bm{y} \in \mathbb{R}^{k}$ a $\bm{q} \in \mathbb{R}^{n}$, s jednotkovou kovariancí $\operatorname{Var}\left(\bm{y}_{i}\right)=\bm{I}$ and $\operatorname{Var}(\bm{q})=\bm{I}$
+		$$
+		\hat{\bm{x}}_{i}=\Sigma_{x}^{1 / 2} \bm{y}_{i}, \quad \hat{\bm{p}}=\Sigma_{p}^{1/2} \bm{q}
+		$$
+		kde kritérium optimality se mění na
+		\begin{equation}
+			\chi^2 = \sum_{i=1}^N \bm{\hat{y}}_i^T \bm{\hat{y}}_i + \bm{\hat{q}}^T \bm{\hat{q}} 
+		\end{equation}
+		\item linearizuje podmínku
+		\begin{equation}
+			\bm{f}(\bm{\overline{x}}_i+\Sigma_{x}^{1/2}(\bm{y}_i+\Delta\bm{y}_i),\bm{\overline{p}}+\Sigma_{p}^{1/2}(\bm{q}+\Delta\bm{q}) = \bm{0}
+		\end{equation}
+		jako
+		\begin{equation}
+			\bm{f}(\bm{\overline{x}}_i+\Sigma_{x}^{1/2}\bm{y}_i,\bm{\overline{p}}+\Sigma_{p}^{1/2}\bm{q}) + \bm{J}_{y_i} \Delta\bm{y}_i + \bm{J}_q \Delta\bm{q} \approx \bm{0}
+		\end{equation}
+		kde
+		\begin{align}
+			\bm{J}_{y_i} &= \frac{\partial\bm{f}}{\partial\bm{x}}(\bm{\overline{x}}_i+\Sigma_{x}^{1/2}\bm{y}_i,\bm{\overline{p}}+\Sigma_{p}^{1/2}\bm{q}) \Sigma_{x}^{1/2} \\
+			\bm{J}_q &= \frac{\partial\bm{f}}{\partial\bm{q}}(\bm{\overline{x}}_i+\Sigma_{x}^{1/2}\bm{y}_i,\bm{\overline{p}}+\Sigma_{p}^{1/2}\bm{q}) \Sigma_{p}^{1/2}
+		\end{align}
+		\item dělá QR dekompozici matice $\bm{J}_{y_i}$
+		\begin{equation}
+			\bm{Q}_i \bm{R}_i = \bm{J}_{y_i}^T
+		\end{equation}
+		kde poslední sloupce $\bm{Q}_i$ jsou nullspace $\bm{J}_{y_i}$ za předpokladu že se jedná o singulární nebo obdélníkovou matici
+		\begin{equation}
+			\bm{Q}
+			=
+			\begin{bmatrix}
+				\bm{\overline{Q}} & \bm{\widetilde{Q}}
+			\end{bmatrix}
+			\;,\quad 
+			\bm{\widetilde{Q}} \bm{J}_{y_i} = \bm{0}
+		\end{equation}
+		\url{https://scicomp.stackexchange.com/questions/2510/null-space-of-a-rectangular-dense-matrix}
+		což umožnuje eliminovat $\Delta\bm{y}_i$ z vazbových rovnic
+		\begin{equation}
+		\bm{\widetilde{Q}} \bm{f}(\bm{\overline{x}}_i+\Sigma_{x}^{1/2}\bm{y}_i,\bm{\overline{p}}+\Sigma_{p}^{1/2}\bm{q}) + \bm{\widetilde{Q}} \bm{J}_q \Delta\bm{q} \approx \bm{0}
+		\end{equation}
+	\end{enumerate}
 
+	\url{https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=466613} \\
 	\url{https://dspace.cvut.cz/bitstream/handle/10467/65598/F2-BP-2016-Krivosej-Jan-Kinematicka%20kalibrace%20zohlednujici%20rozlozeni%20chyb%20cidel.pdf?sequence=1&isAllowed=y}
 
 	\section{Kalibrace mechanismů, implementace na prostorový seriový robotický řetězec. Zavedení kalibračních parametrů a maticové formulace s nimi.}
